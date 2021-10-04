@@ -49,8 +49,9 @@ check_app_runtime_executables() {
   check_executables
 }
 
+source .env
 remote_repo_name="bench-bot"
-remote_repo="https://github.com/paritytech/$remote_repo_name"
+remote_repo="${REMOTE_REPO:-https://github.com/paritytech}"/$remote_repo_name
 
 benchbot_user="benchbot"
 benchbot_session="/tmp/bench-bot"
