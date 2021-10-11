@@ -238,8 +238,8 @@ var SubstrateRuntimeBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=../frame/{pallet_folder}/src/weights.rs",
-      "--template=../../.maintain/frame-weight-template.hbs",
+      "--output=./frame/{pallet_folder}/src/weights.rs",
+      "--template=./.maintain/frame-weight-template.hbs",
     ].join(" "),
   },
   substrate: {
@@ -258,8 +258,8 @@ var SubstrateRuntimeBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=../frame/{pallet_folder}/src/weights.rs",
-      "--template=../../.maintain/frame-weight-template.hbs",
+      "--output=./frame/{pallet_folder}/src/weights.rs",
+      "--template=./.maintain/frame-weight-template.hbs",
     ].join(" "),
   },
   custom: {
@@ -522,7 +522,6 @@ async function benchmarkRuntime(app, config) {
     if (!checkAllowedCharacters(extra)) {
       return errorResult(`Not allowed to use #&|; in the command!`)
     }
-
 
       // Append extra flags to the end of the command
       let benchCommand = benchConfig.benchCommand
