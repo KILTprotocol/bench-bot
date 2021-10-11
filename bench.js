@@ -86,7 +86,7 @@ var BenchConfigs = {
   kilt: {
     title: "Import Benchmark (random transfers, ed25519 signed)",
     benchCommand:
-      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=\\* --pallet=kilt_launch --steps=50 --repeat=20 --output ../../pallets/kilt-launch/src/default_weights.rs --template ../../.maintain/weight-template.hbs\n",
+      "cargo run -p kilt-parachain --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=* --pallet=kilt_launch --steps=50 --repeat=20 --output pallets/kilt-launch/src/default_weights.rs --template .maintain/weight-template.hbs\n",
   },
 }
 
@@ -180,7 +180,7 @@ var SubstrateKiltBenchmarkConfigs = {
   pallet: {
     title: "Runtime Pallet",
     benchCommand: [
-      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release",
+      "cargo run --quiet --release -p kilt-parachain",
       "--features=runtime-benchmarks",
       "--",
       "benchmark",
@@ -192,14 +192,14 @@ var SubstrateKiltBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=../../pallets/{pallet_folder}/src/default_weights.rs",
-      "--template=../../.maintain/weight-template.hbs",
+      "--output=pallets/{pallet_folder}/src/default_weights.rs",
+      "--template=.maintain/weight-template.hbs",
     ].join(" "),
   },
   "mashnet-node": {
     title: "Runtime Substrate Pallet",
     benchCommand: [
-      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release",
+      "cargo run --quiet --release -p kilt-parachain",
       "--features=runtime-benchmarks",
       "--",
       "benchmark",
@@ -211,14 +211,14 @@ var SubstrateKiltBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=../../pallets/{pallet_folder}/src/default_weights.rs",
-      "--template=../../.maintain/weight-template.hbs",
+      "--output=pallets/{pallet_folder}/src/default_weights.rs",
+      "--template=.maintain/weight-template.hbs",
     ].join(" "),
   },
   custom: {
     title: "Runtime Custom",
     benchCommand:
-      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release --features runtime-benchmarks -- benchmark",
+      "cargo run -p kilt-parachain --quiet --release --features runtime-benchmarks -- benchmark",
   },
 }
 
