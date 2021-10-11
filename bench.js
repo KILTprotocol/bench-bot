@@ -537,8 +537,7 @@ async function benchmarkRuntime(app, config) {
           ? extra.replace("::", "_") + ".rs"
           : ""
         benchCommand = benchCommand.replace("{output_file}", outputFile)
-        // pallet folder should be just the name of the pallet, without the leading
-        // "pallet_" or "frame_", then separated with "-"
+        // pallet folder should be just the name of the pallet separated with "-"
         let palletFolder = extra.replace(/_/g, '-');
         benchCommand = benchCommand.replace("{pallet_folder}", palletFolder)
       } else {
