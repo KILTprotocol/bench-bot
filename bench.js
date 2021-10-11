@@ -86,7 +86,7 @@ var BenchConfigs = {
   kilt: {
     title: "Import Benchmark (random transfers, ed25519 signed)",
     benchCommand:
-      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=\\* --pallet=kilt_launch --steps=10 --repeat=4 --output ../../pallets/kilt-launch/src/default_weights.rs --template ../../.maintain/weight-template.hbs\n",
+      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=\\* --pallet=kilt_launch --steps=50 --repeat=20 --output ../../pallets/kilt-launch/src/default_weights.rs --template ../../.maintain/weight-template.hbs\n",
   },
 }
 
@@ -184,8 +184,8 @@ var SubstrateKiltBenchmarkConfigs = {
       "--",
       "benchmark",
       "--chain=dev",
-      "--steps=10",
-      "--repeat=4",
+      "--steps=50",
+      "--repeat=20",
       "--pallet={pallet_name}",
       '--extrinsic="*"',
       "--execution=wasm",
@@ -203,8 +203,8 @@ var SubstrateKiltBenchmarkConfigs = {
       "--",
       "benchmark",
       "--chain=dev",
-      "--steps=10",
-      "--repeat=4",
+      "--steps=50",
+      "--repeat=20",
       "--pallet={pallet_name}",
       '--extrinsic="*"',
       "--execution=wasm",
