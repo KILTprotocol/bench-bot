@@ -269,6 +269,7 @@ handle_exec() {
 }
 
 main() {
+  source /home/benchbot/bench-bot/.env
   local cmd="$1"
   shift
 
