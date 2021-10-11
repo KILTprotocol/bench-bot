@@ -431,8 +431,6 @@ handle_monitor() {
 }
 
 main() {
-  set -x
-  set -e
   source .env
   local cmd="$1"
   shift

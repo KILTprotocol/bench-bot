@@ -493,7 +493,6 @@ function benchmarkRuntime(app, config) {
         benchConfig = PolkadotXcmBenchmarkConfigs[command]
       } else if (config.repo == "mashnet-node" && config.id == "runtime") {
         const util = (require('util'),config);
-        console.log("Geras 2"+command);
         benchConfig = SubstrateKiltBenchmarkConfigs[command]
       } else {
         return errorResult(
