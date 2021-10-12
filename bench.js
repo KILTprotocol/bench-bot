@@ -83,11 +83,6 @@ var BenchConfigs = {
     benchCommand:
       cargoRun + "-p node-bench --quiet -- node::import::native::ed25519::transfer_keep_alive::rocksdb::medium --json",
   },
-  kilt: {
-    title: "Import Benchmark (random transfers, ed25519 signed)",
-    benchCommand:
-      "cargo run -p kilt-parachain --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=* --pallet=kilt_launch --steps=50 --repeat=20 --output pallets/kilt-launch/src/default_weights.rs --template .maintain/weight-template.hbs\n",
-  },
 }
 
 const prepareBranch = async function (
