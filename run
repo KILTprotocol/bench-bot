@@ -48,6 +48,7 @@ check_app_runtime_executables() {
   )
   check_executables
 }
+
 source .env
 remote_repo_name="bench-bot"
 remote_repo="${REMOTE_REPO:-https://github.com/paritytech}"/$remote_repo_name
@@ -431,7 +432,6 @@ handle_monitor() {
 }
 
 main() {
-  source .env
   local cmd="$1"
   shift
 
