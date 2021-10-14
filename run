@@ -49,8 +49,9 @@ check_app_runtime_executables() {
   check_executables
 }
 
+source .env
 remote_repo_name="bench-bot"
-remote_repo="https://github.com/paritytech/$remote_repo_name"
+remote_repo="${REMOTE_REPO:-https://github.com/paritytech}"/$remote_repo_name
 
 benchbot_user="benchbot"
 benchbot_session="/tmp/bench-bot"
@@ -252,8 +253,8 @@ handle_exec() {
         tmux new-session -d bash -c "
           . ~/.cargo/env &&
           cd \"$install_location\" &&
-          git config --local user.name 'Parity Bot' &&
-          git config --local user.email admin@parity.io &&
+          git config --local user.name \"${BOT_NAME:-Parity Bot}\" &&
+          git config --local user.email ${GIT_USER_EMAIL:-admin@parity.io} &&
           yarn &&
           ${env_vars:-} yarn start 2>&1 | tee -a \"$exec_log_file\"
         "
