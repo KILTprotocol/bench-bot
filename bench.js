@@ -170,6 +170,7 @@ async function benchBranch(app, config) {
   }
 
 }
+
 var SubstrateKiltBenchmarkConfigs = {
   pallet: {
     title: "Runtime Pallet",
@@ -178,7 +179,7 @@ var SubstrateKiltBenchmarkConfigs = {
       "--features=runtime-benchmarks",
       "--",
       "benchmark",
-      "--chain=dev",
+      "--chain=spiritnet-dev",
       "--steps=50",
       "--repeat=20",
       "--pallet={pallet_name}",
@@ -190,7 +191,26 @@ var SubstrateKiltBenchmarkConfigs = {
       "--template=.maintain/weight-template.hbs",
     ].join(" "),
   },
-  "mashnet-node": {
+  "spiritnet-runtime": {
+    title: "Runtime Pallet",
+    benchCommand: [
+      "cargo run --quiet --release -p kilt-parachain",
+      "--features=runtime-benchmarks",
+      "--",
+      "benchmark",
+      "--chain=spiritnet-dev",
+      "--steps=50",
+      "--repeat=20",
+      "--pallet={pallet_name}",
+      '--extrinsic="*"',
+      "--execution=wasm",
+      "--wasm-execution=compiled",
+      "--heap-pages=4096",
+      "--output=./runtimes/spiritnet/src/weights/{pallet_name}.rs",
+      "--template=.maintain/runtime-weight-template.hbs",
+    ].join(" "),
+  },
+  "peregrine": {
     title: "Runtime Substrate Pallet",
     benchCommand: [
       "cargo run --quiet --release -p kilt-parachain",
@@ -205,8 +225,8 @@ var SubstrateKiltBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=pallets/{pallet_folder}/src/default_weights.rs",
-      "--template=.maintain/weight-template.hbs",
+      "--output=./runtimes/peregrine/src/weights/{output_file}",
+      "--template=.maintain/runtime-weight-template.hbs",
     ].join(" "),
   },
   custom: {
