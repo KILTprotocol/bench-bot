@@ -170,7 +170,6 @@ async function benchBranch(app, config) {
   }
 
 }
-
 var SubstrateKiltBenchmarkConfigs = {
   pallet: {
     title: "Runtime Pallet",
@@ -206,7 +205,7 @@ var SubstrateKiltBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=./runtimes/spiritnet/src/weights/{pallet_name}.rs",
+      "--output=./runtimes/spiritnet/src/weights/{output_file}",
       "--template=.maintain/runtime-weight-template.hbs",
     ].join(" "),
   },
