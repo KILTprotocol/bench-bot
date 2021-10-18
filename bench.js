@@ -171,7 +171,6 @@ function benchBranch(app, config) {
     }
   })
 }
-
 var SubstrateKiltBenchmarkConfigs = {
   pallet: {
     title: "Runtime Pallet",
@@ -207,7 +206,7 @@ var SubstrateKiltBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=./runtimes/spiritnet/src/weights/{pallet_name}.rs",
+      "--output=./runtimes/spiritnet/src/weights/{output_file}",
       "--template=.maintain/runtime-weight-template.hbs",
     ].join(" "),
   },
@@ -587,7 +586,7 @@ function benchmarkRuntime(app, config) {
         } else {
           try {
             var last = benchContext.runTask(
-              `yes | cp -rf ${outputFile} runtimes/${command}/src/weignts/${pallet_folder}.rs && git add ${outputFile} && git commit -m "${benchCommand}"`,
+              `git add ${outputFile} && git commit -m "${benchCommand}"`,
             )
             if (last.error) {
               extraInfo = `ERROR: Unable to commit file ${outputFile}`
