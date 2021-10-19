@@ -171,8 +171,28 @@ function benchBranch(app, config) {
     }
   })
 }
-var SubstrateKiltBenchmarkConfigs = {
+
+var KiltRuntimeBenchmarkConfigs = {
   pallet: {
+    title: "Runtime Pallet",
+    benchCommand: [
+      "cargo run --quiet --release -p kilt-parachain",
+      "--features=runtime-benchmarks",
+      "--",
+      "benchmark",
+      "--chain=dev",
+      "--steps=50",
+      "--repeat=20",
+      "--pallet={pallet_name}",
+      '--extrinsic="*"',
+      "--execution=wasm",
+      "--wasm-execution=compiled",
+      "--heap-pages=4096",
+      "--output=pallets/{pallet_folder}/src/default_weights.rs",
+      "--template=.maintain/weight-template.hbs",
+    ].join(" "),
+  },
+  "spiritnet-pallet": {
     title: "Runtime Pallet",
     benchCommand: [
       "cargo run --quiet --release -p kilt-parachain",
@@ -229,13 +249,12 @@ var SubstrateKiltBenchmarkConfigs = {
       "--template=.maintain/runtime-weight-template.hbs",
     ].join(" "),
   },
-  custom: {
-    title: "Runtime Custom",
-    benchCommand:
-      "cargo run -p kilt-parachain --quiet --release --features runtime-benchmarks -- benchmark",
-  },
+    custom: {
+      title: "Runtime Custom",
+      benchCommand:
+        "cargo run -p kilt-parachain --quiet --release --features runtime-benchmarks -- benchmark",
+    },
 }
-
 var SubstrateRuntimeBenchmarkConfigs = {
   pallet: {
     title: "Runtime Pallet",
@@ -505,9 +524,8 @@ function benchmarkRuntime(app, config) {
         benchConfig = PolkadotRuntimeBenchmarkConfigs[command]
       } else if (config.repo == "polkadot" && config.id == "xcm") {
         benchConfig = PolkadotXcmBenchmarkConfigs[command]
-      } else if (config.repo == "mashnet-node" && config.id == "runtime") {
-        const util = (require('util'),config);
-        benchConfig = SubstrateKiltBenchmarkConfigs[command]
+      } else if (config.repo == "mashnet-node") {
+        benchConfig = KiltRuntimeBenchmarkConfigs[command]
       } else {
         return errorResult(
           `${config.repo} repo with ${config.id} is not supported.`,
@@ -529,9 +547,9 @@ function benchmarkRuntime(app, config) {
         // extra here should be the name of a pallet
         benchCommand = benchCommand.replace("{pallet_name}", extra)
         // custom output file name so that pallets with path don't cause issues
-        let outputFile = extra.includes("::")
-          ? extra.replace("::", "_") + ".rs"
-          : ""
+        let outputFile = extra.includes("-")
+          ? extra.replace("-", "_") + ".rs"
+          : extra + ".rs"
         benchCommand = benchCommand.replace("{output_file}", outputFile)
         // pallet folder should be just the name of the pallet separated with "-"
         let palletFolder = extra.replace(/_/g, '-');
