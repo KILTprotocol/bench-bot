@@ -8,10 +8,15 @@ The bot runs commands in response to pull request comments
 ([example](https://github.com/paritytech/polkadot/pull/2541)). The form is:
 
 `/bench [action] [...args]`
+`/bench runtime pallet attestation`
+`/bench runtime spiritnet-pallet kilt-launch`
+`/bench runtime peregrine parachain-staking`
+`/bench runtime spiritnet-runtime pallet_democracy`
 
 [Environment variables](#configuration) and
 [Github settings](#required-github-settings) have to properly configured
 upfront for this interaction to work.
+you can manually run scripts inside scripts director to run all pallets
 
 # Configuration
 
