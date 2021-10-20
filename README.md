@@ -8,10 +8,17 @@ The bot runs commands in response to pull request comments
 ([example](https://github.com/paritytech/polkadot/pull/2541)). The form is:
 
 `/bench [action] [...args]`
-`/bench runtime pallet attestation`
-`/bench runtime spiritnet-pallet kilt-launch`
-`/bench runtime peregrine parachain-staking`
-`/bench runtime spiritnet-runtime pallet_democracy`
+
+
+| Kilt bench Command | Chain Spec | Weight template |
+| :---:       |     :---:      |        :---: |
+| `/bench runtime pallet attestation`  | dev     | default_weights.rs   |
+| `/bench runtime spiritnet-pallet attestation`   | spiritnet-dev       | default_weights.rs    |
+|`/bench runtime peregrine attestation`   | dev     | weight inside peregrine runtime    |
+| `/bench runtime spiritnet-runtime attestation`    | spiritnet-dev       | weight inside spiritnet runtime     |
+
+
+Naming convention: If pallet folder contains hyphen, replace output file with underscore inside runtime
 
 [Environment variables](#configuration) and
 [Github settings](#required-github-settings) have to properly configured
