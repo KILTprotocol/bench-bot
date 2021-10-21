@@ -11,19 +11,19 @@ The bot runs commands in response to pull request comments
 
 
 | Kilt bench Command | Chain Spec | Weight template |
-| :---:       |     :---:      |        :---: |
-| `/bench runtime pallet attestation`  | dev     | default_weights.rs   |
-| `/bench runtime spiritnet-pallet attestation`   | spiritnet-dev       | default_weights.rs    |
-|`/bench runtime peregrine attestation`   | dev     | weight inside peregrine runtime    |
-| `/bench runtime spiritnet-runtime attestation`    | spiritnet-dev       | weight inside spiritnet runtime     |
+| :---        |     :---       |        :---  |
+| `/bench runtime pallet attestation`  | `dev`     | `pallets/{pallet_folder}/src/default_weights.rs`   |
+| `/bench runtime spiritnet-pallet attestation`   | `spiritnet-dev`       | `pallets/{pallet_folder}/src/default_weights.rs`   |
+|`/bench runtime peregrine attestation`   | `dev`     | `runtimes/spiritnet/src/weights/{pallet_name}.rs`    |
+| `/bench runtime spiritnet-runtime attestation`    | `spiritnet-dev`       | `runtimes/spiritnet/src/weights/{pallet_name}.rs`     |
 
 
-Naming convention: If pallet folder contains hyphen, replace output file with underscore inside runtime
+Naming convention: If pallet folder contains hyphen, output file inside runtime will be folder name replaced by underscore otherwise the same.
+You can manually run scripts inside mashnet-node/scripts directory to run all runtime pallets.
 
 [Environment variables](#configuration) and
 [Github settings](#required-github-settings) have to properly configured
 upfront for this interaction to work.
-you can manually run scripts inside scripts director to run all pallets
 
 # Configuration
 
