@@ -14,7 +14,7 @@ The bot runs commands in response to pull request comments
 | :---        |     :---       |        :---  |
 | `/bench runtime pallet attestation`  | `dev`     | `pallets/{pallet_folder}/src/default_weights.rs`   |
 | `/bench runtime spiritnet-pallet attestation`   | `spiritnet-dev`       | `pallets/{pallet_folder}/src/default_weights.rs`   |
-|`/bench runtime peregrine attestation`   | `dev`     | `runtimes/spiritnet/src/weights/{pallet_name}.rs`    |
+|`/bench runtime peregrine attestation`   | `dev`     | `runtimes/peregrine/src/weights/{pallet_name}.rs`    |
 | `/bench runtime spiritnet-runtime attestation`    | `spiritnet-dev`       | `runtimes/spiritnet/src/weights/{pallet_name}.rs`     |
 
 
