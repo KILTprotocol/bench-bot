@@ -12,10 +12,10 @@ The bot runs commands in response to pull request comments
 
 | Kilt bench Command | Chain Spec | Weight template |
 | :---        |     :---       |        :---  |
-| `/bench runtime pallet attestation`  | `dev`     | `pallets/{pallet_folder}/src/default_weights.rs`   |
-| `/bench runtime spiritnet-pallet attestation`   | `spiritnet-dev`       | `pallets/{pallet_folder}/src/default_weights.rs`   |
-|`/bench runtime peregrine attestation`   | `dev`     | `runtimes/peregrine/src/weights/{pallet_name}.rs`    |
-| `/bench runtime spiritnet-runtime attestation`    | `spiritnet-dev`       | `runtimes/spiritnet/src/weights/{pallet_name}.rs`     |
+| `/bench runtime pallet {pallet_name}`  | `dev`     | `pallets/{pallet_folder}/src/default_weights.rs`   |
+| `/bench runtime spiritnet-pallet {pallet_name}`   | `spiritnet-dev`       | `pallets/{pallet_folder}/src/default_weights.rs`   |
+|`/bench runtime peregrine {pallet_name}`   | `dev`     | `runtimes/peregrine/src/weights/{pallet_name}.rs`    |
+| `/bench runtime spiritnet-runtime {pallet_name}`    | `spiritnet-dev`       | `runtimes/spiritnet/src/weights/{pallet_name}.rs`     |
 
 
 Naming convention: If pallet folder contains hyphen, output file inside runtime will be folder name replaced by underscore otherwise the same.
