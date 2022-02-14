@@ -25,6 +25,12 @@ You can manually run scripts inside mashnet-node/scripts directory to run all ru
 [Github settings](#required-github-settings) have to properly configured
 upfront for this interaction to work.
 
+## How to restart
+
+```
+sudo /home/benchbot/bench-bot/run restart
+```
+
 # Configuration
 
 Create a `.env` file in the root with the following:
