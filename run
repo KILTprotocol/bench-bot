@@ -41,9 +41,11 @@ check_app_runtime_executables() {
   )
   check_executables
 }
-
+set -x
+set -e
+source /home/benchbot/bench-bot/.env
 remote_repo_name="bench-bot"
-remote_repo="https://github.com/paritytech/$remote_repo_name"
+remote_repo="${REMOTE_REPO:-https://github.com/paritytech}"/$remote_repo_name
 
 benchbot_user="benchbot"
 benchbot_session="/tmp/bench-bot"
@@ -232,6 +234,8 @@ handle_exec() {
       # wait 1 second between attempts in the "while true" loop below
       sudo ionice -c 1 -n 0 sudo nice -n -19 sudo -u $benchbot_user \
         tmux new-session -d bash -c "
+          set -x &&
+          set -e &&
           . ~/.cargo/env &&
           cd \"$install_location\" &&
           git config --local user.name 'Parity Bot' &&
@@ -268,6 +272,8 @@ handle_exec() {
 }
 
 main() {
+  set -x
+  set -e
   local cmd="$1"
   shift
 

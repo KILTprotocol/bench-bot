@@ -1,5 +1,6 @@
 node_modules
 *.pem
 .env
+.DS_Store
 git
 log.txt

@@ -49,7 +49,7 @@ module.exports = (app) => {
   // case of errors
   // The server will automatically restarted upon exit in ./run
   let isWaitingForExitingWhenFree = false
-  const exitWhenFree = async function() {
+  const exitWhenFree = async function () {
     const isFree = await mutex.runExclusive(function () {
       return pendingPayloadCount === 0
     })
@@ -59,8 +59,8 @@ module.exports = (app) => {
       await exitWhenFree()
     }
   }
-  const logThenExit = function(log) {
-    return async function(...args) {
+  const logThenExit = function (log) {
+    return async function (...args) {
       log(...args)
       // only exit the application after the current events have been processed
       // we only need to register this action once since exitWhenFree calls itself
@@ -101,7 +101,7 @@ module.exports = (app) => {
 
   app.on("issue_comment", async (context) => {
     pendingPayloadCount++
-    await mutex.runExclusive(async function() {
+    await mutex.runExclusive(async function () {
       let commentText = context.payload.comment.body
       if (
         !context.payload.issue.hasOwnProperty("pull_request") ||
@@ -181,7 +181,7 @@ module.exports = (app) => {
           id: action,
           extra,
           getPushDomain,
-          logFatal
+          logFatal,
         }
 
         let report
@@ -204,8 +204,9 @@ module.exports = (app) => {
             logError(report.error)
           }
 
-          const output = `${report.message}${report.error ? `: ${report.error.toString()}` : ""
-            }`
+          const output = `${report.message}${
+            report.error ? `: ${report.error.toString()}` : ""
+          }`
 
           await context.octokit.issues.updateComment({
             owner,
@@ -244,7 +245,7 @@ Toolchain: ${toolchain}
           output = `${output.slice(
             0,
             githubCommentLimitLength -
-            (githubCommentLimitTruncateMessage.length + formattingLength),
+              (githubCommentLimitTruncateMessage.length + formattingLength),
           )}${githubCommentLimitTruncateMessage}`
         }
 
