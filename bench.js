@@ -83,6 +83,11 @@ var BenchConfigs = {
     benchCommand:
       cargoRun + "-p node-bench --quiet -- node::import::native::ed25519::transfer_keep_alive::rocksdb::medium --json",
   },
+  kilt: {
+    title: "Import Benchmark (random transfers, ed25519 signed)",
+    benchCommand:
+      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --release --features runtime-benchmarks -- benchmark --execution=wasm --wasm-execution=Compiled --heap-pages=4096 --extrinsic=\\* --pallet=kilt_launch --steps=10 --repeat=4 --output ../../pallets/kilt-launch/src/default_weights.rs --template ../../.maintain/weight-template.hbs\n",
+  },
 }
 
 const prepareBranch = async function (
@@ -136,10 +141,11 @@ const prepareBranch = async function (
 async function benchBranch(app, config) {
   app.log("Waiting our turn to run benchBranch...")
 
-  try {
-    if (config.repo != "substrate") {
-      return errorResult("Node benchmarks only available on Substrate.")
-    }
+  return mutex.runExclusive(async function () {
+    try {
+      if (config.repo != "substrate" && config.repo != "mashnet-node") {
+        return errorResult("Node benchmarks only available on Substrate.")
+      }
 
     var id = config.id
     var benchConfig = BenchConfigs[id]
@@ -170,6 +176,51 @@ async function benchBranch(app, config) {
   }
 
 }
+var SubstrateKiltBenchmarkConfigs = {
+  pallet: {
+    title: "Runtime Pallet",
+    benchCommand: [
+      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release",
+      "--features=runtime-benchmarks",
+      "--",
+      "benchmark",
+      "--chain=dev",
+      "--steps=10",
+      "--repeat=4",
+      "--pallet={pallet_name}",
+      '--extrinsic="*"',
+      "--execution=wasm",
+      "--wasm-execution=compiled",
+      "--heap-pages=4096",
+      "--output=../../pallets/{pallet_folder}/src/default_weights.rs",
+      "--template=../../.maintain/weight-template.hbs",
+    ].join(" "),
+  },
+  "mashnet-node": {
+    title: "Runtime Substrate Pallet",
+    benchCommand: [
+      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release",
+      "--features=runtime-benchmarks",
+      "--",
+      "benchmark",
+      "--chain=dev",
+      "--steps=10",
+      "--repeat=4",
+      "--pallet={pallet_name}",
+      '--extrinsic="*"',
+      "--execution=wasm",
+      "--wasm-execution=compiled",
+      "--heap-pages=4096",
+      "--output=../../pallets/{pallet_folder}/src/default_weights.rs",
+      "--template=../../.maintain/weight-template.hbs",
+    ].join(" "),
+  },
+  custom: {
+    title: "Runtime Custom",
+    benchCommand:
+      "cd ~/bench-bot/git/mashnet-node/nodes/parachain && cargo run --quiet --release --features runtime-benchmarks -- benchmark",
+  },
+}
 
 var SubstrateRuntimeBenchmarkConfigs = {
   pallet: {
@@ -188,8 +239,8 @@ var SubstrateRuntimeBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=./frame/{pallet_folder}/src/weights.rs",
-      "--template=./.maintain/frame-weight-template.hbs",
+      "--output=../frame/{pallet_folder}/src/weights.rs",
+      "--template=../../.maintain/frame-weight-template.hbs",
     ].join(" "),
   },
   substrate: {
@@ -208,8 +259,8 @@ var SubstrateRuntimeBenchmarkConfigs = {
       "--execution=wasm",
       "--wasm-execution=compiled",
       "--heap-pages=4096",
-      "--output=./frame/{pallet_folder}/src/weights.rs",
-      "--template=./.maintain/frame-weight-template.hbs",
+      "--output=../frame/{pallet_folder}/src/weights.rs",
+      "--template=../../.maintain/frame-weight-template.hbs",
     ].join(" "),
   },
   custom: {
@@ -451,18 +502,22 @@ async function benchmarkRuntime(app, config) {
 
     let command = config.extra.split(" ")[0]
 
-    var benchConfig
-    if (config.repo == "substrate" && config.id == "runtime") {
-      benchConfig = SubstrateRuntimeBenchmarkConfigs[command]
-    } else if (config.repo == "polkadot" && config.id == "runtime") {
-      benchConfig = PolkadotRuntimeBenchmarkConfigs[command]
-    } else if (config.repo == "polkadot" && config.id == "xcm") {
-      benchConfig = PolkadotXcmBenchmarkConfigs[command]
-    } else {
-      return errorResult(
-        `${config.repo} repo with ${config.id} is not supported.`,
-      )
-    }
+      var benchConfig
+      if (config.repo == "substrate" && config.id == "runtime") {
+        benchConfig = SubstrateRuntimeBenchmarkConfigs[command]
+      } else if (config.repo == "polkadot" && config.id == "runtime") {
+        benchConfig = PolkadotRuntimeBenchmarkConfigs[command]
+      } else if (config.repo == "polkadot" && config.id == "xcm") {
+        benchConfig = PolkadotXcmBenchmarkConfigs[command]
+      } else if (config.repo == "mashnet-node" && config.id == "runtime") {
+        const util = (require('util'),config);
+        console.log("Geras 2"+command);
+        benchConfig = SubstrateKiltBenchmarkConfigs[command]
+      } else {
+        return errorResult(
+          `${config.repo} repo with ${config.id} is not supported.`,
+        )
+      }
 
     var extra = config.extra.split(" ").slice(1).join(" ").trim()
 
@@ -470,24 +525,37 @@ async function benchmarkRuntime(app, config) {
       return errorResult(`Not allowed to use #&|; in the command!`)
     }
 
-    // Append extra flags to the end of the command
-    let benchCommand = benchConfig.benchCommand
-    if (command == "custom") {
-      // extra here should just be raw arguments to add to the command
-      benchCommand += " " + extra
-    } else {
-      // extra here should be the name of a pallet
-      benchCommand = benchCommand.replace("{pallet_name}", extra)
-      // custom output file name so that pallets with path don't cause issues
-      let outputFile = extra.includes("::")
-        ? extra.replace("::", "_") + ".rs"
-        : ""
-      benchCommand = benchCommand.replace("{output_file}", outputFile)
-      // pallet folder should be just the name of the pallet, without the leading
-      // "pallet_" or "frame_", then separated with "-"
-      let palletFolder = extra.split("_").slice(1).join("-").trim()
-      benchCommand = benchCommand.replace("{pallet_folder}", palletFolder)
-    }
+
+      // Append extra flags to the end of the command
+      let benchCommand = benchConfig.benchCommand
+      if (command == "custom") {
+        // extra here should just be raw arguments to add to the command
+        benchCommand += " " + extra
+      } else if (config.repo == "mashnet-node") {
+        // extra here should be the name of a pallet
+        benchCommand = benchCommand.replace("{pallet_name}", extra)
+        // custom output file name so that pallets with path don't cause issues
+        let outputFile = extra.includes("::")
+          ? extra.replace("::", "_") + ".rs"
+          : ""
+        benchCommand = benchCommand.replace("{output_file}", outputFile)
+        // pallet folder should be just the name of the pallet, without the leading
+        // "pallet_" or "frame_", then separated with "-"
+        let palletFolder = extra.replace(/_/g, '-');
+        benchCommand = benchCommand.replace("{pallet_folder}", palletFolder)
+      } else {
+        // extra here should be the name of a pallet
+        benchCommand = benchCommand.replace("{pallet_name}", extra)
+        // custom output file name so that pallets with path don't cause issues
+        let outputFile = extra.includes("::")
+          ? extra.replace("::", "_") + ".rs"
+          : ""
+        benchCommand = benchCommand.replace("{output_file}", outputFile)
+        // pallet folder should be just the name of the pallet, without the leading
+        // "pallet_" or "frame_", then separated with "-"
+        let palletFolder = extra.split("_").slice(1).join("-").trim()
+        benchCommand = benchCommand.replace("{pallet_folder}", palletFolder)
+      }
 
     let missing = checkRuntimeBenchmarkCommand(benchCommand)
     if (missing.length > 0) {

@@ -235,8 +235,8 @@ handle_exec() {
         tmux new-session -d bash -c "
           . ~/.cargo/env &&
           cd \"$install_location\" &&
-          git config --local user.name 'Parity Bot' &&
-          git config --local user.email admin@parity.io &&
+          git config --local user.name \"${BOT_NAME:-Parity Bot}\" &&
+          git config --local user.email ${GIT_USER_EMAIL:-admin@parity.io} &&
           git config --local advice.detachedHead false &&
           yarn &&
           while true; do \\
