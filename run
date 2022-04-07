@@ -42,7 +42,7 @@ check_app_runtime_executables() {
   check_executables
 }
 
-source .env
+source /home/benchbot/bench-bot/.env
 remote_repo_name="bench-bot"
 remote_repo="${REMOTE_REPO:-https://github.com/paritytech}"/$remote_repo_name
 

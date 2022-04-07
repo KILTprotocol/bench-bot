@@ -141,11 +141,10 @@ const prepareBranch = async function (
 async function benchBranch(app, config) {
   app.log("Waiting our turn to run benchBranch...")
 
-  return mutex.runExclusive(async function () {
-    try {
-      if (config.repo != "substrate" && config.repo != "mashnet-node") {
-        return errorResult("Node benchmarks only available on Substrate.")
-      }
+  try {
+    if (config.repo != "substrate" && config.repo != "mashnet-node") {
+      return errorResult("Node benchmarks only available on Substrate.")
+    }
 
     var id = config.id
     var benchConfig = BenchConfigs[id]
@@ -511,7 +510,6 @@ async function benchmarkRuntime(app, config) {
         benchConfig = PolkadotXcmBenchmarkConfigs[command]
       } else if (config.repo == "mashnet-node" && config.id == "runtime") {
         const util = (require('util'),config);
-        console.log("Geras 2"+command);
         benchConfig = SubstrateKiltBenchmarkConfigs[command]
       } else {
         return errorResult(
