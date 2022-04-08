@@ -236,7 +236,7 @@ handle_exec() {
           . ~/.cargo/env &&
           cd \"$install_location\" &&
           git config --local user.name \"${BOT_NAME:-Parity Bot}\" &&
-          git config --local user.email ${GIT_USER_EMAIL:-admin@parity.io} &&
+          git config --local user.email \"${GIT_USER_EMAIL:-admin@parity.io}\" &&
           git config --local advice.detachedHead false &&
           yarn &&
           while true; do \\
