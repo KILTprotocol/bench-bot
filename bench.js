@@ -137,7 +137,7 @@ async function benchBranch(app, config) {
   app.log("Waiting our turn to run benchBranch...")
 
   try {
-    if (config.repo != "substrate" && config.repo != "mashnet-node") {
+    if (config.repo != "substrate" && config.repo != "kilt-node") {
       return errorResult("Node benchmarks only available on Substrate.")
     }
 
@@ -556,7 +556,7 @@ async function benchmarkRuntime(app, config) {
         benchConfig = PolkadotRuntimeBenchmarkConfigs[command]
       } else if (config.repo == "polkadot" && config.id == "xcm") {
         benchConfig = PolkadotXcmBenchmarkConfigs[command]
-      } else if (config.repo == "mashnet-node") {
+      } else if (config.repo == "kilt-node") {
         benchConfig = KiltRuntimeBenchmarkConfigs[command]
       } else {
         return errorResult(
@@ -575,7 +575,7 @@ async function benchmarkRuntime(app, config) {
       if (command == "custom") {
         // extra here should just be raw arguments to add to the command
         benchCommand += " " + extra
-      } else if (config.repo == "mashnet-node") {
+      } else if (config.repo == "kilt-node") {
         // extra here should be the name of a pallet
         benchCommand = benchCommand.replace("{pallet_name}", extra)
         // custom output file name so that pallets with path don't cause issues
